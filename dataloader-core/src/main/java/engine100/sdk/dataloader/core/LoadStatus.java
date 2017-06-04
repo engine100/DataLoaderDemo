@@ -7,7 +7,7 @@
 package engine100.sdk.dataloader.core;
 
 /**
- * the status during downloading.</br>
+ * the status during downloading.
  */
 public class LoadStatus {
 

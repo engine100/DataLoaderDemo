@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A manager to down basic data. </br>
+ * <p>A manager to down basic data.</p>
  */
 public class DataManager {
 

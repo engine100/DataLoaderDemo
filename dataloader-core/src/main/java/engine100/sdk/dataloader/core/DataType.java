@@ -7,7 +7,7 @@
 package engine100.sdk.dataloader.core;
 
 /**
- * The BasicData type to download.</br>
+ * The BasicData type to download.
  * e.g. User,Department ...
  */
 public class DataType {

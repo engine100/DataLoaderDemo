@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-
 // 这里添加下面两行代码。
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
@@ -33,5 +32,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
 }
-
-//apply from: 'dataloader.core.bintray.gradle'
+apply from: 'dataloader.util.bintray.gradle'

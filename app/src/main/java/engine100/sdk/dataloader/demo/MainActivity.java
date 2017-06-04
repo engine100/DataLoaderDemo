@@ -16,7 +16,7 @@ import engine100.sdk.dataloader.core.LoadStatus;
 import engine100.sdk.dataloader.core.Progress;
 
 public class MainActivity extends Activity {
-    TextView mText; 
+    TextView mText;
     DataManager manager = DataManager.getInstance();
 
     @Override

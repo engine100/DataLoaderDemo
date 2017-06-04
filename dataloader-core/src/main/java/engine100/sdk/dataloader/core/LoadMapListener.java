@@ -9,13 +9,13 @@ package engine100.sdk.dataloader.core;
 import java.util.Map;
 
 /**
- * The interface show the status or result during downloading</br>
+ * The interface show the status or result during downloading
  * the method callback on UI thread.
  */
 public interface LoadMapListener {
 
     /**
-     * if we repeat call startLoading method ,</br>
+     * if we repeat call startLoading method ,
      * and the manager is loading data already,callback the method
      */
     void onLoading();

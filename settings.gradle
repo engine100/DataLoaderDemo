@@ -1,1 +1,1 @@
-include ':app', ':dataloader-core'
+include ':app', ':dataloader-core', ':dataloader-util'
