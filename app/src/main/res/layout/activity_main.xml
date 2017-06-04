@@ -36,20 +36,20 @@
         android:id="@+id/Button01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:onClick="clear"
-        android:text="清除listener" />
+        android:text="清除listener"
+        android:layout_alignBottom="@+id/Button02"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/Button02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Button01"
-        android:layout_alignBottom="@+id/Button01"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_marginLeft="35dp"
         android:onClick="add"
-        android:text="添加listener" />
+        android:text="添加listener"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
