@@ -9,8 +9,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/dataloader-android" />
             <option value="$PROJECT_DIR$/dataloader-core" />
             <option value="$PROJECT_DIR$/dataloader-util" />
+            <option value="$PROJECT_DIR$/dataloader-worker" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

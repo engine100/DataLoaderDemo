@@ -1,15 +1,15 @@
 apply plugin: 'com.android.library'
-// 这里添加下面两行代码。
+
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 18
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 10
-        targetSdkVersion 25
+        minSdkVersion 8
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
 
@@ -29,7 +29,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
     compile project(':dataloader-core')
 }

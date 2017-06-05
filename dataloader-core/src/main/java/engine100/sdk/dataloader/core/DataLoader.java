@@ -11,6 +11,11 @@ package engine100.sdk.dataloader.core;
  */
 public interface DataLoader {
 
+    /**
+     * @param type data type
+     * @param pro  progress to show
+     * @return if load success ,return true, otherwise false.
+     */
     boolean loadInBackground(DataType type, Progress pro);
 
 }

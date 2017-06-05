@@ -6,10 +6,6 @@
  */
 package engine100.sdk.dataloader.core;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,13 +26,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DataManager {
 
-    private static final int NOTIFY_REFRESH_PROGRESS_MAP = 1;
-    private static final int NOTIFY_LOADING_FINISH = 2;
-    private static final int NOTIFY_ALREADY_LOADING = 3;
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
     private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
     private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
     private static final int KEEP_ALIVE = 1;
+
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
@@ -78,46 +72,23 @@ public class DataManager {
      * downloading status map
      */
     private Map<DataType, String> mProgressMap = Collections.synchronizedMap(new HashMap<DataType, String>());
-
+    private final Progress mPoxyProgress = new Progress() {
+        @Override
+        public void onPublishProgress(DataType type, String message) {
+            onProgress(type, message);
+        }
+    };
     /**
      * download result map
      */
     private Map<DataType, LoadStatus> mResultMap = Collections.synchronizedMap(new HashMap<DataType, LoadStatus>());
-
     private Object mLock = new Object();
-
     /**
      * threadPool for download task
      */
     private ExecutorService sThreadPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE,
             TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory);
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
-        public void handleMessage(Message msg) {
-            if (mMapListener == null) {
-                return;
-            }
-            switch (msg.what) {
-                case NOTIFY_REFRESH_PROGRESS_MAP:
-                    mMapListener.onProgress(mProgressMap);
-                    break;
-                case NOTIFY_LOADING_FINISH:
-                    mMapListener.onFinish(mResultMap);
-                    break;
-                case NOTIFY_ALREADY_LOADING:
-                    mMapListener.onLoading();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-    private final Progress mPoxyProgress = new Progress() {
-        @Override
-        public void onPublishProgress(DataType type, String message) {
-            refreshProgressMap(type, message);
-        }
-    };
     private DataLoader mDataLoader;
 
     private DataManager() {
@@ -145,8 +116,8 @@ public class DataManager {
             return;
         }
 
-        reSetManager();
-
+        mCurrentTaskCount = 0;
+        taskList.clear();
         isLoading = true;
 
         // if reset it in reSetManager,we would get empty result on UI.
@@ -189,6 +160,7 @@ public class DataManager {
     private void loadData(DataType type) {
 
         onStatusChanged(type, LoadStatus.LOADING);
+
         boolean loadResult = false;
 
         try {
@@ -207,42 +179,41 @@ public class DataManager {
 
     }
 
-    private void reSetManager() {
-        isLoading = false;
-        mCurrentTaskCount = 0;
-        taskList.clear();
-    }
-
     private void onLoading() {
         if (mMapListener != null) {
-            mHandler.sendEmptyMessage(NOTIFY_ALREADY_LOADING);
+            mMapListener.onLoading();
+        }
+    }
+
+    private void onProgress(DataType type, String message) {
+        synchronized (mProgressMap) {
+            mProgressMap.put(type, message);
+        }
+
+        if (mMapListener != null) {
+            mMapListener.onProgress(mProgressMap);
         }
     }
 
     private void onTaskFinish() {
         if (mMapListener != null) {
-            mHandler.sendEmptyMessage(NOTIFY_LOADING_FINISH);
+            mMapListener.onFinish(mResultMap);
         }
-        reSetManager();
+
+        isLoading = false;
+        mCurrentTaskCount = 0;
+        taskList.clear();
     }
 
     private void onStatusChanged(DataType type, LoadStatus status) {
-        if (mMapListener != null) {
-            refreshProgressMap(type, status.getValue());
-        }
+
+        onProgress(type, status.getValue());
 
         if ((status == LoadStatus.SUCCESS || status == LoadStatus.FAILED)) {
             synchronized (mResultMap) {
                 mResultMap.put(type, status);
             }
         }
-    }
-
-    private void refreshProgressMap(DataType type, String message) {
-        synchronized (mProgressMap) {
-            mProgressMap.put(type, message);
-        }
-        mHandler.sendEmptyMessage(NOTIFY_REFRESH_PROGRESS_MAP);
     }
 
     private synchronized void addTaskCount(int num) {

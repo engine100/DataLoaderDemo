@@ -1,5 +1,5 @@
 // 根节点添加
-version = "1.0.0"
+version = "2.1.0"
 // 根节点添加
 def siteUrl = 'https://github.com/engine100/DataLoaderDemo'    // project homepage
 def gitUrl = 'https://github.com/engine100/DataLoaderDemo.git' // project git

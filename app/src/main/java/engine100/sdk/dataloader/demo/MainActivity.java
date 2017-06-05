@@ -8,16 +8,38 @@ import android.widget.Toast;
 
 import java.util.Map;
 
+import engine100.sdk.dataloader.android.AndroidMapListener;
 import engine100.sdk.dataloader.core.DataLoader;
 import engine100.sdk.dataloader.core.DataManager;
 import engine100.sdk.dataloader.core.DataType;
 import engine100.sdk.dataloader.core.LoadMapListener;
 import engine100.sdk.dataloader.core.LoadStatus;
 import engine100.sdk.dataloader.core.Progress;
+import engine100.sdk.dataloader.util.LoaderProgressUtils;
 
 public class MainActivity extends Activity {
     TextView mText;
     DataManager manager = DataManager.getInstance();
+    LoadMapListener lis = new AndroidMapListener() {
+
+        @Override
+        public void onProgressUI(Map<DataType, String> progressMap) {
+
+            mText.setText(LoaderProgressUtils.flatProgress(progressMap));
+        }
+
+        @Override
+        public void onLoadingUI() {
+            Toast.makeText(getBaseContext(), "重复下载", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onFinishUI(Map<DataType, LoadStatus> resultMap) {
+
+            mText.setText(LoaderProgressUtils.flatResult(resultMap));
+            Toast.makeText(getBaseContext(), "完成", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +50,13 @@ public class MainActivity extends Activity {
 
             @Override
             public boolean loadInBackground(DataType type, Progress pro) {
-                pro.onPublishProgress(type, "正在下载:" + type.getName());
-                try {
-                    Thread.sleep(30);
-                } catch (InterruptedException e) {
-
-                    e.printStackTrace();
-                }
-                return false;
+                W wmanager = new W();
+                return wmanager.loadInBackground(type, pro);
             }
         });
 
-        DataType[] ts = new DataType[100];
-        for (int i = 0; i < 100; i++) {
+        DataType[] ts = new DataType[5];
+        for (int i = 0; i < 5; i++) {
             ts[i] = new DataType(i + "", "name" + i);
         }
         manager.setDataTypes(ts);
@@ -48,33 +64,6 @@ public class MainActivity extends Activity {
 
         manager.setLoadMapListener(lis);
     }
-
-    final StringBuilder sb = new StringBuilder();
-    LoadMapListener lis = new LoadMapListener() {
-
-        @Override
-        public void onProgress(Map<DataType, String> progressMap) {
-            sb.setLength(0);
-
-            for (DataType key : progressMap.keySet()) {
-                String typename = key.getName();
-                String msg = progressMap.get(key);
-                sb.append(typename).append(":").append(msg).append("\n");
-
-            }
-            mText.setText(sb.toString());
-        }
-
-        @Override
-        public void onLoading() {
-            Toast.makeText(getBaseContext(), "重复下载", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onFinish(Map<DataType, LoadStatus> resultMap) {
-            Toast.makeText(getBaseContext(), "完成", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     public void starting(View view) {
 

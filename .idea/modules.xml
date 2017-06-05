@@ -4,8 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DataLoaderDemo.iml" filepath="$PROJECT_DIR$/DataLoaderDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dataloader-android/dataloader-android.iml" filepath="$PROJECT_DIR$/dataloader-android/dataloader-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/dataloader-core/dataloader-core.iml" filepath="$PROJECT_DIR$/dataloader-core/dataloader-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/dataloader-util/dataloader-util.iml" filepath="$PROJECT_DIR$/dataloader-util/dataloader-util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dataloader-worker/dataloader-worker.iml" filepath="$PROJECT_DIR$/dataloader-worker/dataloader-worker.iml" />
     </modules>
   </component>
 </project>
